@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load verbose_names %}
+{% block content %}
+<div class="center">
+    <h1>Редактирование товара</h1>
+</div>
+<div class="flex-center">
+    <div class="card p-3 m-3" style="width: 40rem;">
+        <form method="post" enctype='multipart/form-data'>
+            {% csrf_token%}
+            <p>
+                <label for="{{ form.name.id_for_label }}">Наименование:</label>
+                {{ form.name }}
+              <div class="invalid-feedback">
+                {{ form.name.errors }}
+              </div>
+            </p>
+            <p>
+                <label for="{{ form.purchase_price.id_for_label }}">Стоимость закупки:</label>
+                {{ form.purchase_price }}
+              <div class="invalid-feedback">
+                {{ form.purchase_price.errors }}
+              </div>
+            </p>
+            <p>
+                <label for="{{ form.sale_price.id_for_label }}">Стоимость продажи:</label>
+                {{ form.sale_price }}
+              <div class="invalid-feedback">
+                {{ form.sale_price.errors }}
+              </div>
+            </p>
+            <button type="submit" class="form-control btn btn-warning">Сохранить</button>
+        </form>
+        <br>
+        <a href="{% url 'ProductsList' %}">
+            <button type="button" class="form-control btn btn-success ">Перейти к списку товаров</button>
+        </a><br>
+    </div>
+</div>
+
+{% endblock %}
+{% block info %}
+{% endblock %}

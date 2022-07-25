@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load verbose_names %}
+{% block title %}Покупатели : {{ block.super }}{% endblock %}
+{% block content %}
+<div class="center">
+    <h1>Список покупателей</h1>
+</div>
+<div>
+    <a href="{% url 'CreateCustomer' %}" class="m-3"><button type="button" class="btn btn-primary">Добавить покупателя</button></a>
+    <table id="CustomersTable" class="m-3 border ListTable table table-striped" >
+        <thead>
+            <tr>
+                <th>ФИО</th>
+                <th>Год рождения</th>
+                <th>Пол</th>
+                <th>Дата регистрации</th>
+                <th>Согласие на обработку ПД</th>
+                <th>Фото</th>
+            </tr>
+        </thead>
+
+        {% for customer in customers %}
+            <tr>
+                <td><a href="{% url 'ViewCustomer' customer.pk %}">{{ customer.FIO }}</a></td>
+                <td>{{ customer.birthDate|date:"d.m.Y" }}</td>
+                <td>{{ customer.get_gender_display }}</td>
+                <td>{{ customer.registerDate|date:"d.m.Y" }}</td>
+                <td>{% if customer.PDConsent %} Да {% else %} Нет {% endif %}</td>
+                {% if customer.photo %}
+                <td><img src="{{ customer.photo.url }}" width="100px"></td>
+                {% else %}
+                <td>-</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+    {% include 'inc/_paginator.html'%}
+    <a href="{% url 'CreateCustomer' %}" class="m-3"><button type="button" class="btn btn-primary">Добавить покупателя</button></a>
+</div>
+{% endblock %}
+{% block info %}
+{% endblock %}

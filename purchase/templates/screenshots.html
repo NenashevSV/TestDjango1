@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div class="center">
+    <h1>Галлерея проектов</h1>
+</div>
+<div class="m-3">
+    <p>На данной странице представлена галлерая проектов с последнего места работы. (для понимания чем я занимался)</p>
+    <fieldset class="screenshot">
+        <legend>
+            Web сервис телемеханической системы контроля и управления станциями катодной защиты
+        </legend>
+        <div>
+            <img src="{% static '/img/screenshots/1.png' %}"><br><hr>
+            <img src="{% static '/img/screenshots/2.png' %}"><br><hr>
+            <img src="{% static '/img/screenshots/3.png' %}"><br><hr>
+            <img src="{% static '/img/screenshots/4.png' %}"><br><hr>
+            <img src="{% static '/img/screenshots/5.png' %}"><br><hr>
+            <img src="{% static '/img/screenshots/6.png' %}"><br><hr>
+            <img src="{% static '/img/screenshots/7.png' %}"><br><hr>
+            <img src="{% static '/img/screenshots/8.png' %}"><br>
+        </div>
+    </fieldset>
+    <fieldset class="screenshot">
+        <legend>
+            Web сервис системы телеметрического контроля пунктов редуцированя газа
+        </legend>
+        <div>
+            <img src="{% static '/img/screenshots/9.png' %}"><br><hr>
+            <img src="{% static '/img/screenshots/10.png' %}"><br><hr>
+            <img src="{% static '/img/screenshots/11.png' %}"><br><hr>
+            <img src="{% static '/img/screenshots/12.png' %}"><br><hr>
+            <img src="{% static '/img/screenshots/13.png' %}"><br>
+        </div>
+    </fieldset>
+    <fieldset class="screenshot">
+        <legend>
+            Десктопная программа эмуляции контроллеров станций катодной защиты и пунктов редуцированя газа
+        </legend>
+        <div>
+            <img src="{% static '/img/screenshots/14.png' %}"><br>
+        </div>
+    </fieldset>
+    <fieldset class="screenshot">
+        <legend>
+            Web сервис для терминального общения с контроллерами
+        </legend>
+        <div>
+            <img src="{% static '/img/screenshots/15.png' %}"><br>
+        </div>
+    </fieldset>
+</div>
+{% endblock %}
+
+{% block task %}
+{% endblock %}
+
+{% block info %}
+{% endblock %}

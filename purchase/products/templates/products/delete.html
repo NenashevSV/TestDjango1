@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load verbose_names %}
+{% block content %}
+<div class="center">
+    <h1>Удаление товара</h1>
+</div>
+<div class="flex-center">
+    <form method="post">{% csrf_token %}
+        <div class="card m-3" style="width: 40rem;">
+            <h3 class="text-danger m-3">Вы действительно хотите удалить этот товар?</h3>
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Стоимость закупки: {{ product.purchase_price }}</li>
+            <li class="list-group-item">Стоимость продажи: {{ product.sale_price }}</li>
+          </ul>
+          <div class="card-body flex-center">
+              <button type="submit" value="Confirm" class="card-btn btn btn-danger m-3">Да</button>
+              <a href="{% url 'ProductsList' %}" class="card-link"><button type="button" class="card-btn btn btn-success m-3">Нет</button></a>
+          </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+{% block info %}
+{% endblock %}

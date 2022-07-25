@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load verbose_names %}
+{% block content %}
+<div class="center">
+    <h1>Изменение покупки</h1>
+</div>
+<div class="flex-center">
+    <div class="card p-3 m-3" style="width: 40rem;">
+        <h4>Покупатель: {{registry.customer.FIO}}</h4>
+            <h5>Покупки от {{registry.sale_date|date:"d.m.Y"}}</h5>
+        <hr>
+        <form method="post" enctype='multipart/form-data'>
+            {% csrf_token%}
+            {{ form.as_p}}
+            <button type="submit" class="form-control btn btn-warning">Изменить</button>
+        </form>
+        <br>
+        <a href="{% url 'ViewRegistry' registry.pk %}" ><button type="button" class="form-control btn btn-success">Вернутся к таблице</button></a><br>
+    </div>
+</div>
+{% endblock %}
+{% block infodata %}
+    <fieldset class="code">
+        <legend>Модели</legend>
+        <pre>
+class RegistryData (models.Model):
+	registry = models.ForeignKey(Registry, on_delete=models.PROTECT, verbose_name="Строка реестра")
+	product = models.ForeignKey(Product, on_delete=models.PROTECT, verbose_name="Товар")
+	count = models.IntegerField(verbose_name='Кол-во')
+	price = models.DecimalField(max_digits=12, decimal_places=2, verbose_name="Цена за единицу", blank=True, null=True)
+	sum = models.DecimalField(max_digits=22, decimal_places=2, verbose_name="Сумма", blank=True, null=True)
+
+	class Meta:
+		ordering = ['-registry', 'sum']
+		verbose_name = 'Данные покупок'
+		verbose_name_plural = 'Данные покупок'
+
+	def __str__(self):
+		return f"{self.registry}-{self.product}"
+
+	def get_absolute_url(self):
+		return reverse('ViewRegistry', kwargs={'pk': self.pk})
+        </pre>
+    </fieldset>
+    <fieldset class="code">
+        <legend>Views</legend>
+        <pre>
+class EditRegistryData(UpdateView):
+	model = RegistryData
+	form_class = RegistryDataFormCreate
+	template_name = 'registrys/data/edit.html'
+	context_object_name = 'RegistryData'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		pk = context['object'].pk
+		registry_item = RegistryData.objects.get(pk=pk).registry
+		context['registry'] = registry_item
+		return context
+        </pre>
+    </fieldset>
+    <fieldset class="code">
+        <legend>Шаблон</legend>
+        <pre>
+[% extends 'base.html' %]
+[% load verbose_names %]
+[% block content %]
+&lt;div class="center"&gt;
+    &lt;h1&gt;Изменение покупки&lt;/h1&gt;
+&lt;/div&gt;
+&lt;div class="flex-center"&gt;
+    &lt;div class="card p-3 m-3" style="width: 40rem;"&gt;
+        &lt;h4&gt;Покупатель: [[registry.customer.FIO]]&lt;/h4&gt;
+            &lt;h5&gt;Покупки от [[registry.sale_date|date:"d.m.Y"]]&lt;/h5&gt;
+        &lt;hr&gt;
+        &lt;form method="post" enctype='multipart/form-data'&gt;
+            [% csrf_token%]
+            [[ form.as_p]]
+            &lt;button type="submit" class="form-control btn btn-warning"&gt;Изменить&lt;/button&gt;
+        &lt;/form&gt;
+        &lt;br&gt;
+        &lt;a href="[% url 'ViewRegistry' registry.pk %]" &gt;&lt;button type="button" class="form-control btn btn-success"&gt;Вернутся к таблице&lt;/button&gt;&lt;/a&gt;&lt;br&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+[% endblock %]
+        </pre>
+    </fieldset>
+{% endblock %}

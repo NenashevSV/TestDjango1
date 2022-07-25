@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="center">
+    <h1>Удаление покупки</h1>
+</div>
+<div class="flex-center">
+    <form method="post">{% csrf_token %}
+        <div class="card m-3" style="width: 40rem;">
+            <h3 class="text-danger m-3">Вы действительно хотите удалить эту покупку?</h3>
+          <div class="card-body">
+            <h4 class="card-title">Покупатель: {{ RegistryData.registry.customer.FIO }}</h4>
+            <h5 class="card-title">Дата закупки: {{ RegistryData.registry.sale_date|date:'m.d.Y' }}</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Товар: {{ RegistryData.product }}</li>
+            <li class="list-group-item">Цена: {{ RegistryData.price }}</li>
+            <li class="list-group-item">Кол-во: {{ RegistryData.count }}</li>
+            <li class="list-group-item">Сумма: {{ RegistryData.sum }}</li>
+          </ul>
+          <div class="card-body flex-center">
+              <button type="submit" value="Confirm" class="card-btn btn btn-danger m-3">Да</button><br>
+              <a href="{% url 'ViewRegistry' RegistryData.registry.pk %}" class="card-link"><button type="button" class="card-btn btn btn-success m-3">Нет</button></a><br>
+          </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block infodata %}
+    <fieldset class="code">
+        <legend>Модели</legend>
+        <pre>
+class Registry (models.Model):
+	customer = models.ForeignKey(Customer, on_delete=models.PROTECT, verbose_name="Покупатель")
+	sale_date = models.DateField(verbose_name="Дата продажи")
+
+	class Meta:
+		ordering = ['-sale_date', 'customer']
+		verbose_name = 'Реестр'
+		verbose_name_plural = 'Реестр'
+
+
+	def __str__(self):
+		return f"{self.customer}-{self.sale_date}"
+
+
+	def get_absolute_url(self):
+		return reverse('ViewRegistry', kwargs={'pk': self.pk})
+
+
+class RegistryData (models.Model):
+	registry = models.ForeignKey(Registry, on_delete=models.PROTECT, verbose_name="Строка реестра")
+	product = models.ForeignKey(Product, on_delete=models.PROTECT, verbose_name="Товар")
+	count = models.IntegerField(verbose_name='Кол-во')
+	price = models.DecimalField(max_digits=12, decimal_places=2, verbose_name="Цена за единицу", blank=True, null=True)
+	sum = models.DecimalField(max_digits=22, decimal_places=2, verbose_name="Сумма", blank=True, null=True)
+
+	class Meta:
+		ordering = ['-registry', 'sum']
+		verbose_name = 'Данные покупок'
+		verbose_name_plural = 'Данные покупок'
+
+	def __str__(self):
+		return f"{self.registry}-{self.product}"
+
+	def get_absolute_url(self):
+		return reverse('ViewRegistry', kwargs={'pk': self.pk})
+        </pre>
+    </fieldset>
+    <fieldset class="code">
+        <legend>Views</legend>
+        <pre>
+class DeleteRegistryData(DeleteView):
+	model = RegistryData
+	template_name = 'registrys/data/delete.html'
+	context_object_name = 'RegistryData'
+
+	def get_success_url(self):
+		pk = self.object.registry.pk
+		return reverse_lazy('ViewRegistry', kwargs={'pk': pk})
+        </pre>
+    </fieldset>
+    <fieldset class="code">
+        <legend>Шаблон</legend>
+        <pre>
+[% extends 'base.html' %]
+[% block content %]
+&lt;div class="center"&gt;
+    &lt;h1&gt;Удаление покупки&lt;/h1&gt;
+&lt;/div&gt;
+&lt;div class="flex-center"&gt;
+    &lt;form method="post"&gt;[% csrf_token %]
+        &lt;div class="card m-3" style="width: 40rem;"&gt;
+            &lt;h3 class="text-danger m-3"&gt;Вы действительно хотите удалить эту покупку?&lt;/h3&gt;
+          &lt;div class="card-body"&gt;
+            &lt;h4 class="card-title"&gt;Покупатель: [[ RegistryData.registry.customer.FIO ]]&lt;/h4&gt;
+            &lt;h5 class="card-title"&gt;Дата закупки: [[ RegistryData.registry.sale_date|date:'m.d.Y' ]]&lt;/h5&gt;
+          &lt;/div&gt;
+          &lt;ul class="list-group list-group-flush"&gt;
+            &lt;li class="list-group-item"&gt;Товар: [[ RegistryData.product ]]&lt;/li&gt;
+            &lt;li class="list-group-item"&gt;Цена: [[ RegistryData.price ]]&lt;/li&gt;
+            &lt;li class="list-group-item"&gt;Кол-во: [[ RegistryData.count ]]&lt;/li&gt;
+            &lt;li class="list-group-item"&gt;Сумма: [[ RegistryData.sum ]]&lt;/li&gt;
+          &lt;/ul&gt;
+          &lt;div class="card-body flex-center"&gt;
+              &lt;button type="submit" value="Confirm" class="card-btn btn btn-danger m-3"&gt;Да&lt;/button&gt;&lt;br&gt;
+              &lt;a href="[% url 'ViewRegistry' RegistryData.registry.pk %]" class="card-link"&gt;&lt;button type="button" class="card-btn btn btn-success m-3"&gt;Нет&lt;/button&gt;&lt;/a&gt;&lt;br&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+&lt;/div&gt;
+[% endblock %]
+
+        </pre>
+    </fieldset>
+{% endblock %}

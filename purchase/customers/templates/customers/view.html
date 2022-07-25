@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load verbose_names %}
+{% block content %}
+<div class="center">
+    <h1>Просмотр покупателя</h1>
+</div>
+<div class="flex-center">
+    <div class="card" style="width: 40rem;">
+        {% if customer.photo %}
+        <img class="card-img-top" src="{{ customer.photo.url }}" alt="Card image cap" width="286px">
+        {% endif %}
+      <div class="card-body">
+        <h5 class="card-title">{{ customer.FIO }}</h5>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Дата рождения: {{ customer.birthDate|date:"d.m.Y" }}</li>
+        <li class="list-group-item">Пол: {{ customer.get_gender_display }}</li>
+        <li class="list-group-item">Дата регистрации: {{ customer.registerDate|date:"d.m.Y" }}</li>
+        <li class="list-group-item">Согласие на обработку ПД:
+                {% if customer.PDConsent %} Да {% else %} Нет {% endif %}
+        </li>
+      </ul>
+      <div class="card-body flex-center">
+          <a href="{% url 'CustomersList' %}" class="card-link"><button type="button" class="btn btn-success m-3">Перейти к списку покупателей</button></a>
+          <a href="{% url 'CreateCustomer' %}" class="card-link"><button type="button" class=" btn btn-primary m-3">Создать нового покупателя</button></a>
+          <a href="{% url 'EditCustomer' customer.pk %}" class="card-link"><button type="button" class="btn btn-warning m-3">Изменить этого покупателя</button></a>
+          <a href="{% url 'DeleteCustomer' customer.pk %}" class="card-link"><button type="button" class="btn btn-danger m-3">Удалить этого покупателя</button></a>
+      </div>
+    </div>
+</div>
+{% endblock %}
+{% block info %}
+{% endblock %}

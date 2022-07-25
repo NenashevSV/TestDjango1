@@ -1,0 +1,38 @@
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link
+      {% if request.get_full_path == '/' %}active{% endif %}
+      " href="/">Главная</a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link
+      {% if '/registry/' in request.get_full_path %}active{% endif %}
+      " href="{% url 'RegistrysList' %}">Реестр</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link
+      {% if '/customer/' in request.get_full_path %}active{% endif %}
+      " href="{% url 'CustomersList' %}">Покупатели</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link
+      {% if '/product/' in request.get_full_path %}active{% endif %}
+      " href="{% url 'ProductsList' %}">Товары</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link
+    {% if '/report/' in request.get_full_path %}active{% endif %}
+    " href="{% url 'ReportList' %}">Отчеты</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link
+    {% if '/aadmin/' in request.get_full_path %}active{% endif %}
+    " href="{% url 'aadmin' %}">Админка</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link
+    {% if '/screenshots/' in request.get_full_path %}active{% endif %}
+    " href="{% url 'screenshots' %}">Галлерея проектов</a>
+  </li>
+</ul>

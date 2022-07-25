@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load verbose_names %}
+{% block content %}
+<div style="text-align:center;">
+    <h1>Строка реестра</h1>
+</div>
+<div style="display: flex; justify-content: space-between;background: beige;" >
+  <div class="card-body" style="text-align:center;">
+    <h4 class="card-title">{{ Registry.customer.FIO }}</h4>
+    <h4> Дата закупки: {{ Registry.sale_date|date:'d.m.Y' }}</h4>
+  </div>
+    <div>
+          <a href="{% url 'RegistrysList' %}" class="card-link"><button type="button" class="btn btn-success m-3">Перейти к реестру</button></a>
+<!--          <a href="{% url 'CreateRegistry' %}" class="card-link"><button type="button" class="btn btn-primary m-3">Создать новую строку реестра</button></a>-->
+          <a href="{% url 'EditRegistry' Registry.pk %}" class="card-link"><button type="button" class="btn btn-warning m-3">Изменить эту строку</button></a>
+          <a href="{% url 'DeleteRegistry' Registry.pk %}" class="card-link"><button type="button" class="btn btn-danger m-3">Удалить эту строку</button></a>
+    </div>
+</div>
+<div style="text-align:center;" class="mt-5">
+    <h2>Табличная часть закупки {{ Registry.customer.FIO }} от {{ Registry.sale_date|date:'d.m.Y' }}</h2>
+</div>
+<div>
+    <a href="{% url 'CreateRegistry' %}" class="m-3"><button type="button" class="btn btn-primary">Добавить строку</button></a>
+    <table class="m-3 border ListTable table table-striped">
+        <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Цена за единицу</th>
+                <th>Количество</th>
+                <th>Общая стоимость</th>
+            </tr>
+        </thead>
+        {% for item in RegistryData%}
+            <tr>
+                <td><a href="{{item.get_absolute_url}}">{{ item.product }}</a></td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.count }}</td>
+                <td>{{ item.summ }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <a href="{% url 'CreateRegistry' %}" class="m-3"><button type="button" class="btn btn-primary">Добавить строку</button></a>
+</div>
+{% endblock %}
+
+

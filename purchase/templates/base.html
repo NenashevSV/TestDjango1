@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Demo{% endblock %}</title>
+    {% block extrahead %}
+    {% endblock %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link href="{% static '/css/style.css' %}" rel="stylesheet" >
+</head>
+<body class="p-3">
+    {% include 'inc/_navbar.html'%}
+    <div class="page p-3">
+        <div style="
+            {% if '/screenshots/' in request.get_full_path %}width: 100%;{% else %}width: 75%;{% endif %}
+        ">
+            {% block content %}
+            {% endblock %}
+            {% block info %}
+                <hr>
+                <fieldset>
+                    <legend>
+                        Информация о странице
+                    </legend>
+                {% block infodata %}
+                {% endblock %}
+                {% block infodatainc %}
+                    <fieldset class="code">
+                        <legend>Шаблон 'base.html'</legend>
+                        <pre>
+&lt;!DOCTYPE html&gt;
+[% load static %]
+&lt;html lang="ru"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;[% block title %]Demo[% endblock %]&lt;/title&gt;
+    [% block extrahead %]
+    [% endblock %]
+    &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous"&gt;
+    &lt;link href="[% static '/css/style.css' %]" rel="stylesheet" &gt;
+&lt;/head&gt;
+&lt;body class="p-3"&gt;
+    [% include 'inc/_navbar.html'%]
+    &lt;div class="page p-3"&gt;
+        &lt;div style="width: 75%;"&gt;
+            [% block content %]
+            [% endblock %]
+            [% block info %]
+                &lt;hr&gt;
+                &lt;fieldset&gt;
+                    &lt;legend&gt;
+                        Информация о странице
+                    &lt;/legend&gt;
+                [% block infodata %]
+                [% endblock %]
+                    &lt;fieldset class="code"&gt;
+                        &lt;legend&gt;Шаблон 'base.html'&lt;/legend&gt;
+                        &lt;pre&gt;
+                            [текст этого шаблона]
+                        &lt;/pre&gt;
+                    &lt;/fieldset&gt;
+                &lt;/fieldset&gt;
+            [% endblock %]
+        &lt;/div&gt;
+        [% block task %]
+        &lt;div class="p-5" style="width: 25%; border-left: 1px solid #ebebeb;"&gt;
+            &lt;fieldset&gt;
+                &lt;legend&gt;
+                    Задание
+                &lt;/legend&gt;
+                &lt;p&gt;Вести справочник покупателей с полями: ФИО, год рождения, пол, дата регистрации в системе, согласие на обработку ПД, фото покупателя. Реализовать CRUD flow для справочника&lt;/p&gt;
+                &lt;p&gt;Вести справочник наименование товаров которыми торгует магазин с полями: Наименование товара, стоимость закупки товара, стоимость продажи товара.  Реализовать CRUD flow для справочника.&lt;/p&gt;
+                &lt;p&gt;Вести реестр покупок с полями: ФИО покупателя (ссылка на покупателя), дата покупки. Экземпляр строки реестра должен позволять вести с табличную часть: наименование покупаемого товара (ссылка на справочник наименований товаров), кол-во покупаемых единиц, стоимость единицы товара, суммарная стоимость товара (кол-во*стоимость продажи). Реализовать CRUD flow для реестра и табличной части экзепляра сроки реестра.&lt;/p&gt;
+                &lt;p&gt;Реализовать отчет которы выводил бы всех покупателей и суммарную стоимость совершенных покупок. Параметрами отчета: дата совершения покупок. Сортировка отчета должна осуществляться по убыванию суммарной стоимости покупок&lt;/p&gt;
+            &lt;/fieldset&gt;
+        &lt;/div&gt;
+        [% endblock %]
+    &lt;/div&gt;
+&lt;/body&gt;
+    [% block laterscripts %]
+    [% endblock %]
+    &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"&gt;&lt;/script&gt;
+&lt;/html&gt;
+                        </pre>
+                    </fieldset>
+                    <fieldset class="code">
+                        <legend>Шаблон 'inc/_navbar.html'</legend>
+                        <pre>
+&lt;ul class="nav nav-tabs"&qt;
+  &lt;li class="nav-item"&qt;
+    &lt;a class="nav-link
+      [% if request.get_full_path == '/' %]active[% endif %]
+      " href="/"&qt;Главная&lt;/a&qt;
+  &lt;/li&qt;
+
+  &lt;li class="nav-item"&qt;
+    &lt;a class="nav-link
+      [% if '/registry/' in request.get_full_path %]active[% endif %]
+      " href="[% url 'RegistrysList' %]"&qt;Реестр&lt;/a&qt;
+  &lt;/li&qt;
+  &lt;li class="nav-item"&qt;
+    &lt;a class="nav-link
+      [% if '/customer/' in request.get_full_path %]active[% endif %]
+      " href="[% url 'CustomersList' %]"&qt;Покупатели&lt;/a&qt;
+  &lt;/li&qt;
+  &lt;li class="nav-item"&qt;
+    &lt;a class="nav-link
+      [% if '/product/' in request.get_full_path %]active[% endif %]
+      " href="[% url 'ProductsList' %]"&qt;Товары&lt;/a&qt;
+  &lt;/li&qt;
+  &lt;li class="nav-item"&qt;
+    &lt;a class="nav-link
+    [% if '/report/' in request.get_full_path %]active[% endif %]
+    " href="[% url 'ReportList' %]"&qt;Отчеты&lt;/a&qt;
+  &lt;/li&qt;
+&lt;/ul&qt;
+                        </pre>
+                    </fieldset>
+                    <fieldset class="code">
+                        <legend>Шаблон 'inc/paginator.html'</legend>
+                        <pre>
+[% if page_obj.has_other_pages %]
+    &lt;nav aria-label="Page navigation example"&qt;
+    &lt;ul class="pagination justify-content-center"&qt;
+    [% for page in page_obj.paginator.page_range %]
+        &lt;li class="page-item"&qt;
+            &lt;a class="page-link" href="?page=[[ page ]]"&qt;[[ page ]]&lt;/a&qt;
+        &lt;/li&qt;
+    [% endfor %]
+    &lt;/ul&qt;
+    &lt;/nav&qt;
+[% endif %]
+                        </pre>
+                    </fieldset>
+                </fieldset>
+            {% endblock %}
+            {% endblock %}
+        </div>
+        {% block task %}
+        <div class="p-5" style="width: 25%; border-left: 1px solid #ebebeb;">
+            <fieldset>
+                <legend>
+                    Задание
+                </legend>
+                <p>Вести справочник покупателей с полями: ФИО, год рождения, пол, дата регистрации в системе, согласие на обработку ПД, фото покупателя. Реализовать CRUD flow для справочника</p>
+                <p>Вести справочник наименование товаров которыми торгует магазин с полями: Наименование товара, стоимость закупки товара, стоимость продажи товара.  Реализовать CRUD flow для справочника.</p>
+                <p>Вести реестр покупок с полями: ФИО покупателя (ссылка на покупателя), дата покупки. Экземпляр строки реестра должен позволять вести с табличную часть: наименование покупаемого товара (ссылка на справочник наименований товаров), кол-во покупаемых единиц, стоимость единицы товара, суммарная стоимость товара (кол-во*стоимость продажи). Реализовать CRUD flow для реестра и табличной части экзепляра сроки реестра.</p>
+                <p>Реализовать отчет которы выводил бы всех покупателей и суммарную стоимость совершенных покупок. Параметрами отчета: дата совершения покупок. Сортировка отчета должна осуществляться по убыванию суммарной стоимости покупок</p>
+            </fieldset>
+        </div>
+        {% endblock %}
+    </div>
+</body>
+    {% block laterscripts %}
+    {% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+</html>

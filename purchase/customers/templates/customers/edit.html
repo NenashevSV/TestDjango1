@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load verbose_names %}
+{% block content %}
+<div class="center">
+    <h1>Редактирование покупателя</h1>
+</div>
+<div class="flex-center m-3">
+    <div class="card p-3" style="width: 40rem;">
+        <form method="post" enctype='multipart/form-data'>
+            {% csrf_token%}
+            <p>
+                <label for="{{ form.FIO.id_for_label }}">ФИО:</label>
+                {{ form.FIO }}
+              <div class="invalid-feedback">
+                {{ form.FIO.errors }}
+              </div>
+            </p>
+            <p>
+                <label for="{{ form.birthDate.id_for_label }}">Дата рождения:</label>
+                {{ form.birthDate }}
+              <div class="invalid-feedback">
+                {{ form.birthDate.errors }}
+              </div>
+
+            </p>
+            <p>
+                <label for="{{ form.gender.id_for_label }}">Пол:</label>
+                {{ form.gender }}
+              <div class="invalid-feedback">
+                {{ form.gender.errors }}
+              </div>
+            </p>
+            <p>
+                <label for="{{ form.PDConsent.id_for_label }}">согласие на обработку ПД:</label>
+                {{ form.PDConsent }}
+            </p>
+            <p>
+                {% if customer.photo %}
+            <div class="flex-center"><img src="{{ customer.photo.url }}" style="width: 18rem;"></div>
+                {% endif %}
+                <br>
+                <label for="{{ form.photo.id_for_label }}">Фото:</label>
+                {{ form.photo }}
+            </p>
+            <button type="submit" class="form-control btn btn-warning">Сохранить</button>
+        </form>
+        <br>
+        <a href="{% url 'CustomersList' %}">
+            <button type="button" class="form-control btn btn-success ">Перейти к списку покупателей</button>
+        </a><br>
+    </div>
+</div>
+{% endblock %}
+{% block info %}
+{% endblock %}

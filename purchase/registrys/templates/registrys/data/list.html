@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load verbose_names %}
+{% block title %}Покупатели : {{ block.super }}{% endblock %}
+{% block content %}
+<div class="center">
+    <h1>Реестр</h1>
+</div>
+<div>
+    <a href="{% url 'CreateRegistry' %}" class="m-3"><button type="button" class="btn btn-primary">Добавить строку реестра</button></a>
+    <table id="ProductsTable" class="m-3 border ListTable table table-striped" >
+        <thead>
+            <tr>
+                <th>Покупатель</th>
+                <th>Дата покупки</th>
+            </tr>
+        </thead>
+        {% for registry in Registrys %}
+            <tr>
+                <td><a href="{% url 'ViewRegistry' registry.pk %}">{{ registry.customer.FIO }}</a></td>
+                <td>{{ registry.sale_date }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% include 'inc/_paginator.html'%}
+    <a href="{% url 'CreateRegistry' %}" class="m-3"><button type="button" class="btn btn-primary">Добавить строку реестра</button></a>
+</div>
+{% endblock %}
+

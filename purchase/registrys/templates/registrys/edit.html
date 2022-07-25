@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load verbose_names %}
+{% block content %}
+<div class="center">
+    <h1>Редактирование строки реестра</h1>
+</div>
+<div class="flex-center">
+    <div class="card p-3" style="width: 40rem;">
+        <form method="post" enctype='multipart/form-data'>
+            {% csrf_token%}
+              <div class="invalid-feedback">
+                {{ form.non_field.error }}
+              </div>
+            <p>
+                <label for="{{ form.customer.id_for_label }}">Наименование:</label>
+                {{ form.customer }}
+              <div class="invalid-feedback">
+                {{ form.customer.errors }}
+              </div>
+            </p>
+            <p>
+                <label for="{{ form.sale_date.id_for_label }}">Стоимость закупки:</label>
+                {{ form.sale_date }}
+              <div class="invalid-feedback">
+                {{ form.sale_date.errors }}
+              </div>
+            </p>
+            <button type="submit" class="form-control btn btn-warning">Сохранить</button>
+        </form>
+        <br>
+        <a href="{% url 'RegistrysList' %}">
+            <button type="button" class="form-control btn btn-success ">Перейти к списку товаров</button>
+        </a><br>
+    </div>
+</div>
+
+{% endblock %}
+

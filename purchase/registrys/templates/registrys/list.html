@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Реестр : {{ block.super }}{% endblock %}
+{% block content %}
+<div class="center">
+    <h1>Реестр</h1>
+</div>
+<div>
+    <a href="{% url 'CreateRegistry' %}" class="m-3"><button type="button" class="btn btn-primary">Добавить строку реестра</button></a>
+    <table id="ProductsTable" class="m-3 border ListTable table table-striped" >
+        <thead>
+            <tr>
+                <th>Покупатель</th>
+                <th>Дата покупки</th>
+            </tr>
+        </thead>
+        {% for registry in Registrys %}
+            <tr>
+                <td><a href="{% url 'ViewRegistry' registry.pk %}">{{ registry.customer.FIO }}</a></td>
+                <td>{{ registry.sale_date }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% include 'inc/_paginator.html'%}
+    <a href="{% url 'CreateRegistry' %}" class="m-3"><button type="button" class="btn btn-primary">Добавить строку реестра</button></a>
+</div>
+{% endblock %}
+
+{% block infodata %}
+    <fieldset class="code">
+        <legend>Модель</legend>
+        <pre>
+class Registry (models.Model):
+	customer = models.ForeignKey(Customer, on_delete=models.PROTECT, verbose_name="Покупатель")
+	sale_date = models.DateField(verbose_name="Дата продажи")
+
+	class Meta:
+		ordering = ['-sale_date', 'customer']
+		verbose_name = 'Реестр'
+		verbose_name_plural = 'Реестр'
+
+
+	def __str__(self):
+		return f"{self.customer}-{self.sale_date}"
+
+
+	def get_absolute_url(self):
+		return reverse('ViewRegistry', kwargs={'pk': self.pk})
+        </pre>
+    </fieldset>
+    <fieldset class="code">
+        <legend>Views</legend>
+        <pre>
+class RegistryList(ListView):
+	model = Registry
+	template_name = 'registrys/list.html'
+	context_object_name = 'Registrys'
+	paginate_by = 3
+        </pre>
+    </fieldset>
+    <fieldset class="code">
+        <legend>Шаблон 'registrys/list.html'</legend>
+        <pre>
+[% extends 'base.html' %]
+[% block title %]Реестр : [[ block.super ]][% endblock %]
+[% block content %]
+&lt;div class="center"&gt;
+    &lt;h1&gt;Реестр&lt;/h1&gt;
+&lt;/div&gt;
+&lt;div&gt;
+    &lt;a href="[% url 'CreateRegistry' %]" class="m-3"&gt;&lt;button type="button" class="btn btn-primary"&gt;Добавить строку реестра&lt;/button&gt;&lt;/a&gt;
+    &lt;table id="ProductsTable" class="m-3 border ListTable table table-striped" &gt;
+        &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;Покупатель&lt;/th&gt;
+                &lt;th&gt;Дата покупки&lt;/th&gt;
+            &lt;/tr&gt;
+        &lt;/thead&gt;
+        [% for registry in Registrys %]
+            &lt;tr&gt;
+                &lt;td&gt;&lt;a href="[% url 'ViewRegistry' registry.pk %]"&gt;[[ registry.customer.FIO ]]&lt;/a&gt;&lt;/td&gt;
+                &lt;td&gt;[[ registry.sale_date ]]&lt;/td&gt;
+            &lt;/tr&gt;
+        [% endfor %]
+    &lt;/table&gt;
+    [% include 'inc/_paginator.html'%]
+    &lt;a href="[% url 'CreateRegistry' %]" class="m-3"&gt;&lt;button type="button" class="btn btn-primary"&gt;Добавить строку реестра&lt;/button&gt;&lt;/a&gt;
+&lt;/div&gt;
+[% endblock %]
+        </pre>
+    </fieldset>
+{% endblock %}
+

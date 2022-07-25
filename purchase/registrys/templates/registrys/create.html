@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load verbose_names %}
+{% block content %}
+<div class="center">
+    <h1>Создание строки реестра</h1>
+</div>
+<div class="flex-center">
+    <div class="card p-3 m-3" style="width: 40rem;">
+        <form method="post" enctype='multipart/form-data'>
+            {% csrf_token%}
+            {{ form.as_p}}
+            <button type="submit" class="form-control btn btn-warning">Сохранить</button>
+        </form>
+        <br>
+        <a href="{% url 'RegistrysList' %}" ><button type="button" class="form-control btn btn-success ">Перейти к реестру</button></a><br>
+    </div>
+</div>
+{% endblock %}
+{% block infodata %}
+    <fieldset class="code">
+        <legend>Модели</legend>
+        <pre>
+class Registry (models.Model):
+	customer = models.ForeignKey(Customer, on_delete=models.PROTECT, verbose_name="Покупатель")
+	sale_date = models.DateField(verbose_name="Дата продажи")
+
+	class Meta:
+		ordering = ['-sale_date', 'customer']
+		verbose_name = 'Реестр'
+		verbose_name_plural = 'Реестр'
+
+
+	def __str__(self):
+		return f"{self.customer}-{self.sale_date}"
+
+
+	def get_absolute_url(self):
+		return reverse('ViewRegistry', kwargs={'pk': self.pk})
+        </pre>
+    </fieldset>
+    <fieldset class="code">
+        <legend>Views</legend>
+        <pre>
+class CreateRegistry(CreateView):
+	form_class = RegistryForm
+	template_name = 'registrys/create.html'
+        </pre>
+    </fieldset>
+    <fieldset class="code">
+        <legend>Forms</legend>
+        <pre>
+class DropDateInput(forms.TextInput):
+	input_type = 'date'
+
+class RegistryForm(forms.ModelForm):
+	class Meta:
+		model = Registry
+		fields = ['customer', 'sale_date']
+		widgets = {
+			'customer': forms.Select(attrs={'class': 'form-control'}),
+			'sale_date': DropDateInput(attrs={'class': 'form-control'}),
+		}
+        </pre>
+    </fieldset>
+
+    <fieldset class="code">
+        <legend>Шаблон</legend>
+        <pre>
+[% extends 'base.html' %]
+[% load verbose_names %]
+[% block content %]
+&lt;div class="center" &gt;
+    &lt;h1 &gt;Создание строки реестра&lt;/h1 &gt;
+&lt;/div &gt;
+&lt;div class="flex-center" &gt;
+    &lt;div class="card p-3 m-3" style="width: 40rem;" &gt;
+        &lt;form method="post" enctype='multipart/form-data' &gt;
+            [% csrf_token%]
+            [[ form.as_p]]
+            &lt;button type="submit" class="form-control btn btn-warning" &gt;Сохранить&lt;/button &gt;
+        &lt;/form &gt;
+        &lt;br &gt;
+        &lt;a href="[% url 'RegistrysList' %]"  &gt;&lt;button type="button" class="form-control btn btn-success " &gt;Перейти к реестру&lt;/button &gt;&lt;/a &gt;&lt;br &gt;
+    &lt;/div &gt;
+&lt;/div &gt;
+        </pre>
+    </fieldset>
+{% endblock %}

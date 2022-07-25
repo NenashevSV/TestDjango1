@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load verbose_names %}
+{% block title %}Покупатели : {{ block.super }}{% endblock %}
+{% block content %}
+<div class="center">
+    <h1>Список товаров</h1>
+</div>
+<div >
+    <a href="{% url 'CreateProduct' %}" class="m-3"><button type="button" class="btn btn-primary">Добавить товар</button></a>
+    <table id="ProductsTable" class="m-3 border ListTable table table-striped" >
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Стоимость закупки</th>
+                <th>Стоимость продажи</th>
+            </tr>
+        </thead>
+        {% for product in Products %}
+            <tr>
+                <td><a href="{% url 'ViewProduct' product.pk %}">{{ product.name }}</a></td>
+                <td>{{ product.purchase_price }}</td>
+                <td>{{ product.sale_price }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% include 'inc/_paginator.html'%}
+    <a href="{% url 'CreateProduct' %}" class="m-3"><button type="button" class="btn btn-primary">Добавить товар</button></a>
+</div>
+{% endblock %}
+{% block info %}
+{% endblock %}

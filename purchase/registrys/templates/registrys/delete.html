@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="center">
+    <h1>Удаление строки реестра</h1>
+</div>
+<div class="flex-center">
+    <form method="post">{% csrf_token %}
+        <div class="card m-3" style="width: 40rem;">
+            <h3 class="text-danger m-3">Вы действительно хотите удалить эту строку?</h3>
+          <div class="card-body">
+            <h5 class="card-title">{{ registry.customer.FIO }}</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Дата закупки: {{ registry.sale_date }}</li>
+          </ul>
+          <div class="card-body flex-center">
+              <button type="submit" value="Confirm" class="card-btn btn btn-danger m-3">Да</button><br>
+              <a href="{% url 'RegistrysList' %}" class="card-link"><button type="button" class="card-btn btn btn-success m-3">Нет</button></a><br>
+          </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block infodata %}
+    <fieldset class="code">
+        <legend>Модель</legend>
+        <pre>
+class Registry (models.Model):
+	customer = models.ForeignKey(Customer, on_delete=models.PROTECT, verbose_name="Покупатель")
+	sale_date = models.DateField(verbose_name="Дата продажи")
+
+	class Meta:
+		ordering = ['-sale_date', 'customer']
+		verbose_name = 'Реестр'
+		verbose_name_plural = 'Реестр'
+
+
+	def __str__(self):
+		return f"{self.customer}-{self.sale_date}"
+
+
+	def get_absolute_url(self):
+		return reverse('ViewRegistry', kwargs={'pk': self.pk})
+        </pre>
+    </fieldset>
+    <fieldset class="code">
+        <legend>Views</legend>
+        <pre>
+class DeleteRegistry(DeleteView):
+	model = Registry
+	success_url = reverse_lazy('RegistryList')
+	template_name = 'registrys/delete.html'
+        </pre>
+    </fieldset>
+    <fieldset class="code">
+        <legend>Шаблон</legend>
+        <pre>
+[% extends 'base.html' %]
+[% block content %]
+&lt;div class="center"&gt;
+    &lt;h1&gt;Удаление строки реестра&lt;/h1&gt;
+&lt;/div&gt;
+&lt;div class="flex-center"&gt;
+    &lt;form method="post"&gt;[% csrf_token %]
+        &lt;div class="card m-3" style="width: 40rem;"&gt;
+            &lt;h3 class="text-danger m-3"&gt;Вы действительно хотите удалить эту строку?&lt;/h3&gt;
+          &lt;div class="card-body"&gt;
+            &lt;h5 class="card-title"&gt;[[ registry.customer.FIO ]]&lt;/h5&gt;
+          &lt;/div&gt;
+          &lt;ul class="list-group list-group-flush"&gt;
+            &lt;li class="list-group-item"&gt;Дата закупки: [[ registry.sale_date ]]&lt;/li&gt;
+          &lt;/ul&gt;
+          &lt;div class="card-body flex-center"&gt;
+              &lt;button type="submit" value="Confirm" class="card-btn btn btn-danger m-3"&gt;Да&lt;/button&gt;&lt;br&gt;
+              &lt;a href="[% url 'RegistrysList' %]" class="card-link"&gt;&lt;button type="button" class="card-btn btn btn-success m-3"&gt;Нет&lt;/button&gt;&lt;/a&gt;&lt;br&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+&lt;/div&gt;
+[% endblock %]
+
+        </pre>
+    </fieldset>
+{% endblock %}

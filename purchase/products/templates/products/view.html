@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load verbose_names %}
+{% block content %}
+<div class="center">
+    <h1>Просмотр товара</h1>
+</div>
+<div class="flex-center m-3">
+    <div class="card" style="width: 40rem;">
+        {% if Product.photo %}
+        <img class="card-img-top" src="{{ Product.photo.url }}" alt="Card image cap" width="286px">
+        {% endif %}
+      <div class="card-body">
+        <h5 class="card-title">{{ Product.name }}</h5>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Стоимость закупки: {{ Product.purchase_price }}</li>
+        <li class="list-group-item">Стоимость продажи: {{ Product.sale_price }}</li>
+      </ul>
+      <div class="card-body flex-center">
+          <a href="{% url 'ProductsList' %}" class="card-link"><button type="button" class="btn btn-success m-3">Перейти к списку товаров</button></a>
+          <a href="{% url 'CreateProduct' %}" class="card-link"><button type="button" class="btn btn-primary m-3">Создать новй товар</button></a>
+          <a href="{% url 'EditProduct' Product.pk %}" class="card-link"><button type="button" class="btn btn-warning m-3">Изменить этот<br>товар</button></a>
+          <a href="{% url 'DeleteProduct' Product.pk %}" class="card-link"><button type="button" class="btn btn-danger m-3">Удалить этот товар</button></a>
+      </div>
+    </div>
+</div>
+{% endblock %}
+{% block info %}
+{% endblock %}
